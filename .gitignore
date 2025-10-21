@@ -1,0 +1,38 @@
+# =========================
+# Yocto build folders
+# =========================
+builds/*
+builds/*/conf/*
+
+# Ignore all conf files except local.conf
+!builds/*/conf/local.conf
+!builds/*/conf/bblayers.conf
+
+
+# Logs, stamps, locks
+*.log
+*.stamp
+*.lock
+
+# =========================
+# VSCode files
+# =========================
+.vscode/
+*.code-workspace
+
+# =========================
+# OS / Editor temporary files
+# =========================
+*.swp
+*.bak
+*.tmp
+*.DS_Store
+*.Thumbs.db
+.cache/
+
+# =========================
+# Optional: BitBake cache files
+# =========================
+*.pyc
+*.pyo
+*.pyd
