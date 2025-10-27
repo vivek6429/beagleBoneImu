@@ -1,0 +1,64 @@
+
+
+/* this is an overlay for beagle bone device tree */
+/dts-v1/;
+/plugin/;
+
+
+#include <dt-bindings/gpio/gpio.h>
+#include <dt-bindings/pinctrl/am33xx.h>
+#include <dt-bindings/pinctrl/omap.h>
+
+
+
+/* root  */
+/{
+        /* set a compatibility for this overlay */
+        /* When U-Boot tries to apply the overlay, it first checks whether at least one compatible string matches between overlay and base DTB.*/ 
+        compatible = "ti,am335x-bone-black", "ti,am335x-bone", "ti,am33xx";
+        
+        
+        /* lets add few leds */
+        testLeds {
+
+                compatible = "gpio-leds";
+                pinctrl-names = "default";
+                pinctrl-0 = <&custom_led_pins>;
+                
+		led6 {  
+			label = "extra:blue:heartbeat";
+			gpios = <&gpio1 16 GPIO_ACTIVE_HIGH>;
+			linux,default-trigger = "heartbeat";
+			default-state = "off";
+		};
+
+                led7 {  
+			label = "extra:blue:none";
+			gpios = <&gpio3 19 GPIO_ACTIVE_HIGH>;
+			linux,default-trigger = "none";
+			default-state = "off";
+		};
+        };
+};
+
+
+/* edit pin mux to include led pins*/
+&am33xx_pinmux {
+	custom_led_pins: my-custom-pins {
+		pinctrl-single,pins = <
+			AM33XX_PADCONF(AM335X_PIN_GPMC_A0, PIN_OUTPUT_PULLDOWN, MUX_MODE7)           /*  gpio 1_16 is on AM335X_PIN_GPMC_A0*/
+			AM33XX_PADCONF(AM335X_PIN_MCASP0_FSR,  PIN_OUTPUT_PULLDOWN, MUX_MODE7)        /* gpio 3_19 is on AM335X_PIN_MCASP0_FSR see manual table 9-10*/
+		>;
+	};
+};
+
+
+/* a way for us to know from the system*/
+&{/chosen} {
+        overlays {
+                /* loaded overlays under: /proc/device-tree/chosen/overlays/ */
+                overlay-installed  = "hello world";
+        };
+
+};
+

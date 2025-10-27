@@ -1,0 +1,2 @@
+enable_uboot_overlays=1
+uboot_overlay_addr0=/boot/overlays/custom.dtbo
