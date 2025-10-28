@@ -8,3 +8,11 @@ is comproside of nodes and has  a root nodes.
 /{ 
  <.............>
 }
+bitbake -c menuconfig virtual/kernel
+bitbake -c savedefconfig virtual/kernel
+/home/victor/Projects/yocto/builds/beagleBuild/tmp/work/beaglebone_yocto-poky-linux-gnueabi/linux-yocto/6.6.21+git/linux-beaglebone_yocto-standard-build/defconfig
+
+
+
+bitbake -c devshell u-boot
+make menuconfig
