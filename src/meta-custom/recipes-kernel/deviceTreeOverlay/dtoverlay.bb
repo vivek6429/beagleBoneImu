@@ -23,6 +23,7 @@ inherit devicetree
 # Output file name (Yocto will compile it)
 DTBO_FILE = "LedButtonOverlay1.dtbo"
 
+
 do_install:append() {
 
     # Install overlay for kernel/firmware reference
@@ -39,16 +40,33 @@ do_install:append() {
     install -d ${D}/boot
     install -m 0644 ${S}/uEnv.txt ${D}/boot/uEnv.txt
 
-
-    # # Install the compiled dtbo file to boot overlays directory : uboot picks from here 
-    # install -d ${D}/boot/overlays
-    # install -m 0644 ${B}/LedButtonOverlay1.dtbo ${D}/boot/overlays/
-
-
-    # # Install uEnv.txt to boot directory to load the overlay at boot time
-    # install -d ${D}/boot
-    # install -m 0644 ${S}/uEnv.txt ${D}/boot/uEnv.txt
 }
+
+
+
 
 #BitBake needs to know what subset of ${D} to package 
 FILES:${PN} = " ${nonarch_base_libdir}/firmware/overlays  /boot /boot/overlays"
+
+
+#to move to fat32 boot partition
+do_deploy() {
+    install -d ${DEPLOYDIR}
+    install -m 0644 ${B}/${DTBO_FILE} ${DEPLOYDIR}/
+
+    install -d ${DEPLOYDIR}/overlays
+    install -m 0644 ${B}/${DTBO_FILE} ${DEPLOYDIR}/overlays/
+}
+
+
+
+
+python do_display_banner() {
+    bb.plain("***********************************************");
+    bb.plain("*                                             *");
+    bb.plain("*         DTB                               *");
+    bb.plain("*                                             *");
+    bb.plain("***********************************************");
+}
+
+addtask display_banner before do_build
