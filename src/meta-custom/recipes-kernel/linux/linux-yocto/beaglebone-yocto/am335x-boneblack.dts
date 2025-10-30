@@ -18,23 +18,23 @@
     /* lets add few leds */
         testLeds {
 
-                compatible = "gpio-leds";
-                pinctrl-names = "default";
-                pinctrl-0 = <&custom_led_pins>;
+            compatible = "gpio-leds";
+            pinctrl-names = "default";
+            pinctrl-0 = <&custom_led_pins>;
                 
-		led6 {  
-			label = "extra:blue:heartbeat";
-			gpios = <&gpio1 16 GPIO_ACTIVE_HIGH>;
-			linux,default-trigger = "heartbeat";
-			default-state = "off";
-		};
+			led6 {  
+				label = "extra:blue:heartbeat";
+				gpios = <&gpio2 6 GPIO_ACTIVE_HIGH>;
+				linux,default-trigger = "heartbeat";
+				default-state = "off";
+			};
 
-                led7 {  
-			label = "extra:blue:none";
-			gpios = <&gpio3 19 GPIO_ACTIVE_HIGH>;
-			linux,default-trigger = "none";
-			default-state = "off";
-		};
+			led7 {  
+				label = "extra:blue:none";
+				gpios = <&gpio2 7 GPIO_ACTIVE_HIGH>;
+				linux,default-trigger = "none";
+				default-state = "off";
+			};
         };
 
 };
@@ -219,8 +219,8 @@
 
 	custom_led_pins: my-custom-pins {
 		pinctrl-single,pins = <
-			AM33XX_PADCONF(AM335X_PIN_GPMC_A0, PIN_OUTPUT_PULLDOWN, MUX_MODE7)           /*  gpio 1_16 is on AM335X_PIN_GPMC_A0*/
-			AM33XX_PADCONF(AM335X_PIN_MCASP0_FSR,  PIN_OUTPUT_PULLDOWN, MUX_MODE7)        /* gpio 3_19 is on AM335X_PIN_MCASP0_FSR see manual table 9-10*/
+			AM33XX_PADCONF(AM335X_PIN_LCD_DATA0, PIN_OUTPUT_PULLDOWN, MUX_MODE7)           /*  gpio 2_6 is on */
+			AM33XX_PADCONF(AM335X_PIN_LCD_DATA1,  PIN_OUTPUT_PULLDOWN, MUX_MODE7)          /* gpio 2_7 is on  see manual table 9-10*/
 		>;
 	};
 
