@@ -1,0 +1,3 @@
+[submodule "src/meta-openembedded"]
+	path = src/meta-openembedded
+	url = https://git.openembedded.org/meta-openembedded

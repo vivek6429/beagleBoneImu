@@ -66,3 +66,54 @@ bootz 0x82000000 - 0x88000000
 
 
 bitbake -e | grep ^VARIABLENAME=
+
+
+cat /proc/interrupts 
+IRQ number | no of interrupts | contrller |pin | trigger type | device driver using
+
+
+evtest /dev/input/event0
+
+
+Device Tree (gpio-keys)
+       ↓
+gpio_keys_probe()  (kernel driver)
+       ↓
+input_allocate_device()
+       ↓
+input_register_device()
+       ↓
+/dev/input/eventX created by evdev
+       ↓
+Interrupt handler calls input_event()
+
+The gpio-keys driver sees this, requests an IRQ on GPIO2_9, and creates a new input device.
+That input device is handed to the evdev subsystem → becomes /dev/input/event0 (or event1, etc).
+There is no static numbering. The first input device registered at boot becomes event0.
+
+
+cat /proc/bus/input/devices
+I: Bus=0019 Vendor=0001 Product=0001 Version=0100
+N: Name="my custom gpio buttons"
+P: Phys=gpio-keys/input0
+S: Sysfs=/devices/platform/gpio-buttons/input/input0
+U: Uniq=
+H: Handlers=kbd event0 
+B: PROP=0
+B: EV=3
+B: KEY=2
+
+ls -l /sys/class/input/event0/device
+lrwxrwxrwx 1 root root 0 May 29 20:24 /sys/class/input/event0/device -> ../../input0
+
+cat  /sys/class/input/event0/device/name
+my custom gpio buttons
+
+
+
+| Thing                      | Who handles it       | Where seen                |
+| -------------------------- | -------------------- | ------------------------- |
+| GPIO interrupt             | gpio-keys driver     | DTS + request_irq         |
+| Convert IRQ → key event    | gpio-keys driver ISR | kernel driver             |
+| Create `/dev/input/event0` | evdev input layer    | `/proc/bus/input/devices` |
+| Mapping name → eventX      | input subsystem      | `Handlers=event0` line    |
